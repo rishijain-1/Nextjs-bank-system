@@ -98,7 +98,7 @@ const Register: React.FC = () => {
               confirm-Password
             </label>
             <input
-              type="confirmpassword"
+              type="password"
               id="confirmPassword"
               {...register("confirmPassword", {
                 validate: (value: string) =>
