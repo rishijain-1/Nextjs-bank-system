@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.hasehedpassword);
+    const isPasswordValid = await bcrypt.compare(password, user.hashPassword);
 
     if (!isPasswordValid) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
@@ -28,13 +28,11 @@ export async function POST(request: NextRequest) {
     // Ideally, you would generate a session token or JWT here
 
     const token = await generateToken(user);
-    const userData={
-      name:user.name,
-      email:user.email,
-      account:user.account
-    }
+    const userData=user.id;
+    
+      
 
-    return NextResponse.json({ token,user }, { status: 200 });
+    return NextResponse.json({ token,userData}, { status: 200 });
 
     // return NextResponse.json({ user }, { status: 200 });
   } catch (error: any) {

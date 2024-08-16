@@ -1,25 +1,33 @@
 // components/Header.tsx
-
-import React from 'react';
+import {useRouter} from 'next/navigation'
 import Link from 'next/link';
 
-const Header: React.FC = () => {
+
+const Header = () => {
+  const router = useRouter();
   return (
-    <header className="bg-gray-800 text-white shadow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-        <div className="text-2xl font-bold">
-          <Link href="/">Dashboard</Link>
+    <header className="bg-gray-700 text-balck p-4">
+        <div className="container mx-auto flex justify-between">
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <div className="flex space-x-4">
+            <Link href="/profile" className="hover:underline">
+              Profile
+            </Link>
+            <Link href="/settings" className="hover:underline">
+              Settings
+            </Link>
+            <button
+              onClick={() => {
+                localStorage.removeItem('userId');
+                router.push('/login');
+              }}
+              className="text-red-600 hover:underline"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-        <div className="flex items-center ">
-          
-          <button
-            className="px-3 py-2 rounded-md text-sm font-medium bg-red-600 hover:bg-red-700 transition duration-200"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-    </header>
+      </header>
   );
 };
 

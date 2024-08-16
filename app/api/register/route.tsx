@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     const saveData = {
       email,
-      hasehedpassword: hash,
+      hashPassword: hash,
       name,
       account,
     };
