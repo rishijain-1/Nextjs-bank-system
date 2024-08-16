@@ -26,7 +26,7 @@ const Login = () => {
        
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
-      router.push('/');
+      router.push('/dashboard');
     } else {
       const data = await response.json();
       setError(data.error);
