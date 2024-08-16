@@ -40,14 +40,15 @@ const Register: React.FC = () => {
     };
 
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch('/api/register', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dataWithAccountNumber),
       });
-
+      const result = await res.json();
+      console.log(result);
       if (res.ok) {
         console.log("User registered successfully");
         reset();
@@ -75,7 +76,7 @@ const Register: React.FC = () => {
               type="text"
               id="name"
               {...register("name", { required: "Name is required" })}
-              className="w-full p-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="w-full p-2 mt-1 border text-black rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
             {errors.name && (
               <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -84,7 +85,7 @@ const Register: React.FC = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-whit-500"
+              className="block text-sm font-medium text-white-500"
             >
               Email
             </label>
@@ -98,7 +99,7 @@ const Register: React.FC = () => {
                   message: "Invalid email address",
                 },
               })}
-              className="w-full p-2 mt-1 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="w-full p-2 mt-1 border text-black rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
