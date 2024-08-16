@@ -1,5 +1,3 @@
-// app/page.tsx
-
 "use client";
 
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -9,6 +7,7 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
+  account: string;
 }
 
 const Register: React.FC = () => {
@@ -20,8 +19,44 @@ const Register: React.FC = () => {
     reset,
   } = useForm<FormData>();
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log("Form Submitted:", data);
+  const generateAccountNumber = (): string => {
+    const accountNumberLength = 11; // Define the length of the account number
+    const digits = "0123456789";
+    let accountNumber = "";
+
+    for (let i = 0; i < accountNumberLength; i++) {
+      accountNumber += digits[Math.floor(Math.random() * digits.length)];
+    }
+
+    return accountNumber;
+  };
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const accountNumber = generateAccountNumber();
+
+    const dataWithAccountNumber = {
+      ...data,
+      account: accountNumber,
+    };
+
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataWithAccountNumber),
+      });
+
+      if (res.ok) {
+        console.log("User registered successfully");
+        reset();
+      } else {
+        console.error("Failed to register user");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   return (
@@ -91,18 +126,19 @@ const Register: React.FC = () => {
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
-             <label
-              htmlFor="password"
+            <label
+              htmlFor="confirmPassword"
               className="block text-sm font-medium text-whit-500 mt-3"
             >
-              confirm-Password
+              Confirm Password
             </label>
             <input
               type="password"
               id="confirmPassword"
               {...register("confirmPassword", {
                 validate: (value: string) =>
-                  value=== getValues("password") || "The passwords do not match",
+                  value === getValues("password") ||
+                  "The passwords do not match",
                 required: "Please confirm your password",
                 minLength: {
                   value: 6,
