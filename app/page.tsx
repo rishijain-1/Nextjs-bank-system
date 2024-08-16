@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 interface FormData {
@@ -163,6 +163,12 @@ const Register: React.FC = () => {
             </button>
           </div>
         </form>
+        <div className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <Link href="/login" className="underline">
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );
