@@ -55,6 +55,14 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   if (!userId) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
   }
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { account_no: true }, 
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
 
   try {
     const transaction = await prisma.transaction.findUnique({
@@ -65,8 +73,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: 'Transaction not found' }, { status: 404 });
     }
 
-    // Optionally, you can check if the transaction belongs to the user
-    if (transaction.sender_acc_no !== userId && transaction.receiver_acc_no !== userId) {
+    if (transaction.sender_acc_no !== user.account_no && transaction.receiver_acc_no !== user.account_no) {
       return NextResponse.json({ error: 'Unauthorized access' }, { status: 403 });
     }
 
