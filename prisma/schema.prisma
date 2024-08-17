@@ -14,12 +14,31 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String   @unique
-  hashedPassword String
-  account  String   @unique
+  id               String   @id @default(cuid()) @map("_id")
+  name             String
+  email            String   @unique
+  password         String
+  account_no       String   @unique
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now())
+  openingBalance   Int      @default(0)
+  closeningBalance Int      @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sentTransaction     Transaction[] @relation("SentTransactions")
+  receivedTransaction Transaction[] @relation("ReceivedTransactions")
 }
+
+model Transaction {
+  id              String            @id @default(cuid()) @map("_id")
+  sender_acc_no   String
+  receiver_acc_no String
+  amount          Int
+  type            TransactionType   @default(IMPS)
+  transfer_date   DateTime          @default(now())
+  method          TransactionMethod @default(CREDIT)
+
+  sender   User @relation("SentTransactions", fields: [sender_acc_no], references: [id])
+  receiver User @relation("ReceivedTransactions", fields: [receiver_acc_no], references: [id])
+}
+
+
