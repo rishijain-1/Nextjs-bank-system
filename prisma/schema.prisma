@@ -42,3 +42,14 @@ model Transaction {
 }
 
 
+enum TransactionType {
+  UPI
+  NEFT
+  IMPS
+  RTGS
+}
+
+enum TransactionMethod {
+  CREDIT
+  DEBIT
+}
