@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
+import Link from 'next/link';
 interface LoginFormInputs {
   email: string;
   password: string;
@@ -90,6 +90,12 @@ const Login = () => {
             </button>
           </div>
         </form>
+        <div className="mt-4 text-center text-sm">
+          Create an Account{" "}
+          <Link href="/" className="underline text-indigo-400">
+            Sign up
+          </Link>
+        </div>
       </div>
     </div>
   );
