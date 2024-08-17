@@ -158,7 +158,11 @@ const ProfilePage = () => {
           <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">
             Update
           </button>
+          
         </form>
+       <div className="flex justify-end">
+       <Link href="/profile/deleteAccount" className=" text-red-600 " >Delete Account</Link>
+       </div>
       </div>
     </div>
   );
