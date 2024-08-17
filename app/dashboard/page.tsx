@@ -1,7 +1,9 @@
 "use client"
-import { useState, useEffect } from 'react';
+
+import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import FundTransfer from '../transections/fund-transfer/fund-transfer';
 
 const Dashboard = () => {
   const [user, setUser] = useState<any>(null);
@@ -63,7 +65,7 @@ const Dashboard = () => {
             <Link href="/profile" className="text-xl px-3 hover:underline">
               Profile
             </Link>
-            <Link href="/settings" className="text-xl px-3 hover:underline">
+            <Link href="/transactionhistory" className="text-xl px-3 hover:underline">
               Transaction
             </Link>
             <button
@@ -82,10 +84,13 @@ const Dashboard = () => {
         <h2 className="text-3xl font-bold uppercase text-black mb-4">Welcome, {user.name}</h2>
         <div className="bg-white shadow flex justify-around text-black font-bold p-4 rounded-lg">
           <p>Email: {user.email}</p>
-          <p>Account: {user.account}</p>
-          <p>Joined: {new Date(user.createdAt).toLocaleDateString()}</p>
+          <p>Account: {user.account_no}</p>
+          <p>Amount:$ {user.closeningBalance}</p>
+          <p>Joined: {new Date(user.created_at).toLocaleDateString()}</p>
         </div>
       </main>
+     <FundTransfer/>
+    
     </div>
   );
 };

@@ -100,7 +100,7 @@ const ProfilePage = () => {
             <Link href="/profile" className="text-xl px-3 hover:underline">
               Profile
             </Link>
-            <Link href="/settings" className="text-xl px-3 hover:underline">
+            <Link href="/transactionhistory" className="text-xl px-3 hover:underline">
               Transaction
             </Link>
             <button
