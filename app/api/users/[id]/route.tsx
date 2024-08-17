@@ -52,15 +52,30 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-  const id = (params.id || "").replace(/"/g, '');
+export async function DELETE(request: NextRequest) {
+  const { email, password } = await request.json();
 
   try {
-    await prisma.user.delete({
-      where: { id },
+    const user = await prisma.user.findUnique({
+      where: { email },
     });
 
-    return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    // Verify the password
+    const isPasswordValid = await bcrypt.compare(password, user.hashPassword);
+    if (!isPasswordValid) {
+      return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
+    }
+
+    // Delete the user
+    await prisma.user.delete({
+      where: { email },
+    });
+
+    return NextResponse.json({ message: 'Account deleted successfully' }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
