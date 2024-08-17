@@ -1,52 +1,49 @@
-import { NextRequest } from "next/server";
-import prisma from "../../../libs/prisma";
-var bcrypt = require("bcryptjs");
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '../../../libs/prisma';
+import bcrypt from 'bcryptjs';
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { password, email, name, account } = data;
-    const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT!));
+    const { password, email, name, account_no } = data;
+    console.log(data)
+    // Validate input fields
+    if (!password || !email || !name || !account_no) {
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT!, 10));
     const hash = await bcrypt.hash(password, salt);
-    if (!hash) throw new Error("Unable to hash password");
-    
 
-    const saveData = {
-      email,
-      hashPassword: hash,
-      name,
-      account,
-    };
-    console.log(saveData);
-
-    const checkExistingUser = await prisma.user.findUnique({
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
-    if (checkExistingUser) {
-      return new Response(
-        JSON.stringify({ status: 500, data: "User with same email already registered" }),
-        { status: 500 }
+    if (existingUser) {
+      return NextResponse.json(
+        { error: 'User with the same email already registered' },
+        { status: 400 }
       );
     }
 
-    const register = await prisma.user.create({
-      data: saveData,
+    // Create new user
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        hashPassword: hash, // Ensure this matches the schema field
+        name,
+        account_no,
+      },
     });
 
-    if (!register) {
-      return new Response(
-        JSON.stringify({ status: 500, data: "Unable to register user" }),
-        { status: 500 }
-      );
-    }
-
-    return new Response(
-      JSON.stringify({ message: "Account opened successfully!", data: {} }),
-      { status: 200 }
+    return NextResponse.json(
+      { message: 'Account opened successfully!', data: newUser },
+      { status: 201 }
     );
 
   } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
