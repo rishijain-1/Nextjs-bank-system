@@ -7,7 +7,7 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  account: string;
+  account_no: string;
 }
 
 const Register: React.FC = () => {
@@ -36,7 +36,7 @@ const Register: React.FC = () => {
 
     const dataWithAccountNumber = {
       ...data,
-      account: accountNumber,
+      account_no: accountNumber,
     };
 
     try {
@@ -53,10 +53,10 @@ const Register: React.FC = () => {
         console.log("User registered successfully");
         reset();
       } else {
-        console.error("Failed to register user");
+        console.error("Failed to register user:", result.error || "Unknown error");
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.error("Error:", error);
     }
   };
 
@@ -68,7 +68,7 @@ const Register: React.FC = () => {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-whit-500"
+              className="block text-sm font-medium text-white-500"
             >
               Name
             </label>
@@ -108,7 +108,7 @@ const Register: React.FC = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-whit-500"
+              className="block text-sm font-medium text-white-500"
             >
               Password
             </label>
@@ -129,7 +129,7 @@ const Register: React.FC = () => {
             )}
             <label
               htmlFor="confirmPassword"
-              className="block text-sm font-medium text-whit-500 mt-3"
+              className="block text-sm font-medium text-white-500 mt-3"
             >
               Confirm Password
             </label>
