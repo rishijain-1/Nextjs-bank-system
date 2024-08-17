@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '../../../../libs/prisma'; // Adjust the import path if necessary
+import prisma from '../../../../libs/prisma'; 
+import bcrypt from 'bcryptjs';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   // Clean up the ID to remove any extra quotes
@@ -22,12 +23,27 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   const id = (params.id || "").replace(/"/g, '');
-  const { name, email, account } = await request.json();
+  const { email, password, newPassword } = await request.json();
 
   try {
+    const user = await prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.hashPassword);
+    if (!isPasswordValid) {
+      return NextResponse.json({ error: "Invalid current password" }, { status: 401 });
+    }
+
+    const updatedUserData: any = {};
+    if (email) updatedUserData.email = email;
+    if (newPassword) updatedUserData.hashPassword = await bcrypt.hash(newPassword, 10);
+
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: { name, email, account },
+      data: updatedUserData,
     });
 
     return NextResponse.json(updatedUser, { status: 200 });

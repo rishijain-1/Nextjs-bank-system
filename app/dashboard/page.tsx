@@ -31,27 +31,29 @@ const Dashboard = () => {
   }, [router]);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div  className=" items-center h-screen flex justify-center ">Loading...</div>;
   }
 
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-gray-800 text-white p-4">
         <div className="container mx-auto flex justify-between">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="flex space-x-4">
-            <Link href="/profile" className="hover:underline">
+          
+          <Link href="/dashboard" className="items-center  text-2xl font-bold px-3 hover:underline">
+          Dashboard
+          </Link>
+          
+          <div className="flex flex-col sm:flex-row overflow-hidden">
+            <Link href="/profile" className="items-center  text-xl px-3 hover:underline">
               Profile
             </Link>
-            <Link href="/settings" className="hover:underline">
-              Settings
-            </Link>
+            <Link href="/settings" className="text-xl  px-3 hover:underline">Transection</Link>
             <button
               onClick={() => {
                 localStorage.removeItem('user');
                 router.push('/login');
               }}
-              className="text-red-600 hover:underline"
+              className="text-red-600 px-3  hover:underline"
             >
               Logout
             </button>
