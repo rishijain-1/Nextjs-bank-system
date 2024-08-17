@@ -70,7 +70,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
     }
 
-    // Delete the user
+ 
     await prisma.user.delete({
       where: { email },
     });
