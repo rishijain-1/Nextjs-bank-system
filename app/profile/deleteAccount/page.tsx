@@ -1,6 +1,6 @@
 "use client";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -11,9 +11,44 @@ interface DeleteAccountFormData {
 
 const DeleteAccountPage: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<DeleteAccountFormData>();
+  const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userToken = localStorage.getItem('token');
+
+      if (!userToken) {
+        router.push('/login');
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/users`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${userToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        } else {
+          setError('Failed to fetch user data');
+          console.error('Failed to fetch user data:', response.statusText);
+        }
+      } catch (error) {
+        setError('An error occurred while fetching user data');
+        console.error('An error occurred:', error);
+      } finally {
+        
+      }
+    };
+
+    fetchUser();
+  }, [router]);
 
   const onSubmit: SubmitHandler<DeleteAccountFormData> = async (data) => {
     setError(null); 

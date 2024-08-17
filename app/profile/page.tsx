@@ -1,6 +1,7 @@
-"use client";
+"use client"
+
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -13,44 +14,47 @@ interface ProfileFormData {
 const ProfilePage = () => {
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors },reset } = useForm<ProfileFormData>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<ProfileFormData>();
   const [success, setSuccess] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userId = localStorage.getItem('user');
-
-      if (!userId) {
-        router.push('/login'); // Redirect to login if no user ID is found
+      const userToken = localStorage.getItem('token');
+      if (!userToken) {
+        router.push('/login');
         return;
       }
 
-      const response = await fetch(`/api/users/${userId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data);
-      } else {
-        ;
-        console.error('Failed to fetch user data');
+      try {
+        const response = await fetch(`/api/users`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${userToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        } else {
+          setError('Failed to fetch user data');
+        }
+      } catch (error) {
+        setError('An error occurred while fetching user data');
       }
     };
 
     fetchUser();
   }, [router]);
 
-  if (!user) {
-    return <div  className=" items-center h-screen flex justify-center ">Loading...</div>;
-  }
- 
-
   const onSubmit: SubmitHandler<ProfileFormData> = async (data) => {
-    setError(''); 
+    setError('');
     setSuccess('');
-    const userId = localStorage.getItem("user");
+    const userToken = localStorage.getItem("token");
 
-    if (!userId) {
-      setError("User ID not found");
+    if (!userToken) {
+      setError("User token not found");
       return;
     }
 
@@ -60,41 +64,40 @@ const ProfilePage = () => {
     }
 
     const updateData: Partial<ProfileFormData> = {};
-
     if (data.email) updateData.email = data.email;
     if (data.newPassword) updateData.newPassword = data.newPassword;
 
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`/api/users`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${userToken}`
+        },
         body: JSON.stringify({ ...updateData, password: data.password }),
       });
 
       const result = await response.json();
-
       if (response.ok) {
         setSuccess("Profile updated successfully!");
-        reset()
+        reset();
       } else {
         setError(result.error || "Failed to update profile");
       }
     } catch (err) {
       setError("An error occurred while updating the profile.");
     }
-   
   };
-
 
   return (
     <div>
       <header className="bg-gray-800 text-white p-4">
         <div className="container mx-auto flex justify-between">
-        <Link href="/dashboard" className="items-center  text-2xl font-bold px-3 hover:underline">
-          Dashboard
+          <Link href="/dashboard" className="text-2xl font-bold px-3 hover:underline">
+            Dashboard
           </Link>
           <div className="flex flex-col sm:flex-row overflow-hidden">
-            <Link href="/profile" className="items-center text-xl px-3 hover:underline">
+            <Link href="/profile" className="text-xl px-3 hover:underline">
               Profile
             </Link>
             <Link href="/settings" className="text-xl px-3 hover:underline">
@@ -102,7 +105,7 @@ const ProfilePage = () => {
             </Link>
             <button
               onClick={() => {
-                localStorage.removeItem("user");
+                localStorage.removeItem("token");
                 router.push("/login");
               }}
               className="text-red-600 px-3 hover:underline"
@@ -120,7 +123,7 @@ const ProfilePage = () => {
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
-              newEmail or Email
+              New Email or Email
             </label>
             <input
               type="email"
@@ -140,7 +143,7 @@ const ProfilePage = () => {
               {...register("password", { required: "Current password is required" })}
               className="w-full text-black p-2 border rounded-md"
             />
-            {errors.password && <p className="text-red-500">{error}</p>}
+            {errors.password && <p className="text-red-500">{errors.password.message}</p>}
           </div>
 
           <div>
@@ -158,11 +161,12 @@ const ProfilePage = () => {
           <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">
             Update
           </button>
-          
         </form>
-       <div className="flex justify-end">
-       <Link href="/profile/deleteAccount" className=" text-red-600 " >Delete Account</Link>
-       </div>
+        <div className="flex justify-end">
+          <Link href="/profile/deleteAccount" className="text-red-600">
+            Delete Account
+          </Link>
+        </div>
       </div>
     </div>
   );

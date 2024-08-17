@@ -25,16 +25,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Ideally, you would generate a session token or JWT here
+   
+    const token = generateToken(user.id);  
 
-    const token = await generateToken(user);
-    const userData=user.id;
-    
-      
-
-    return NextResponse.json({ token,userData}, { status: 200 });
-
-    // return NextResponse.json({ user }, { status: 200 });
+    return NextResponse.json({ token }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

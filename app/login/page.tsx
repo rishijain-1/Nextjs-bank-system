@@ -22,10 +22,9 @@ const Login = () => {
     });
 
     if (response.ok) {
-        const { token, userData } = await response.json();
+        const { token} = await response.json();
        
         localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(userData));
       router.push('/dashboard');
     } else {
       const data = await response.json();
