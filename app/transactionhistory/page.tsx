@@ -125,46 +125,50 @@ const TransactionHistory = () => {
             </div>
             </div>
         </header>
-        <div className="min-h-screen text-black bg-gray-100 p-6">
-            <div className="container mx-auto bg-white shadow-md rounded-lg p-6">
-                <h1 className="text-2xl font-bold mb-4">Transaction History</h1>
-                <table className="min-w-full bg-white">
+        <div className="min-h-screen text-black bg-gray-100 p-4 sm:p-6">
+          <div className="container mx-auto bg-white shadow-md rounded-lg p-4 sm:p-6">
+            <h1 className="text-xl sm:text-2xl font-bold mb-4">Transaction History</h1>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white">
                 <thead>
-                    <tr>
-                    <th className="py-2 px-4 border-b">ID</th>
-                    <th className="py-2 px-4 border-b">Sender</th>
-                    <th className="py-2 px-4 border-b">Receiver</th>
-                    <th className="py-2 px-4 border-b">Amount</th>
-                    <th className="py-2 px-4 border-b">Type</th>
-                    <th className="py-2 px-4 border-b">Date</th>
-                    <th className="py-2 px-4 border-b">Method</th>
-                    <th className="py-2 px-4 border-b">Actions</th>
-                    </tr>
+                  <tr>
+                    <th className="py-2 px-2 sm:px-4 border-b">ID</th>
+                    <th className="py-2 px-2 sm:px-4 border-b">Sender</th>
+                    <th className="py-2 px-2 sm:px-4 border-b">Receiver</th>
+                    <th className="py-2 px-2 sm:px-4 border-b">Amount</th>
+                    <th className="py-2 px-2 sm:px-4 border-b">Type</th>
+                    <th className="py-2 px-2 sm:px-4 border-b">Date</th>
+                    <th className="py-2 px-2 sm:px-4 border-b">Method</th>
+                    <th className="py-2 px-2 sm:px-4 border-b">Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
-                    {transactions.map((transaction) => (
+                  {transactions.map((transaction) => (
                     <tr key={transaction.id}>
-                        <td className="py-2 px-4 border-b">{transaction.id}</td>
-                        <td className="py-2 px-4 border-b">{transaction.sender_acc_no}</td>
-                        <td className="py-2 px-4 border-b">{transaction.receiver_acc_no}</td>
-                        <td className="py-2 px-4 border-b">${transaction.amount}</td>
-                        <td className="py-2 px-4 border-b">{transaction.type}</td>
-                        <td className="py-2 px-4 border-b">{new Date(transaction.transfer_date).toLocaleDateString()}</td>
-                        <td className="py-2 px-4 border-b">{transaction.method}</td>
-                        <td className="py-2 px-4 border-b">
+                      <td className="py-2 px-2 sm:px-4 border-b">{transaction.id}</td>
+                      <td className="py-2 px-2 sm:px-4 border-b">{transaction.sender_acc_no}</td>
+                      <td className="py-2 px-2 sm:px-4 border-b">{transaction.receiver_acc_no}</td>
+                      <td className="py-2 px-2 sm:px-4 border-b">${transaction.amount}</td>
+                      <td className="py-2 px-2 sm:px-4 border-b">{transaction.type}</td>
+                      <td className="py-2 px-2 sm:px-4 border-b">
+                        {new Date(transaction.transfer_date).toLocaleDateString()}
+                      </td>
+                      <td className="py-2 px-2 sm:px-4 border-b">{transaction.method}</td>
+                      <td className="py-2 px-2 sm:px-4 border-b">
                         <button
-                            onClick={() => handleDelete(transaction.id)}
-                            disabled={deleting === transaction.id}
-                            className="text-red-500 hover:underline"
+                          onClick={() => handleDelete(transaction.id)}
+                          disabled={deleting === transaction.id}
+                          className="text-red-500 hover:underline"
                         >
-                            {deleting === transaction.id ? 'Deleting...' : 'Delete'}
+                          {deleting === transaction.id ? 'Deleting...' : 'Delete'}
                         </button>
-                        </td>
+                      </td>
                     </tr>
-                    ))}
+                  ))}
                 </tbody>
-                </table>
+              </table>
             </div>
+          </div>
         </div>
     </div>
     
