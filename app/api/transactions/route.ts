@@ -42,10 +42,19 @@ export async function GET(request: NextRequest) {
         transfer_date: 'desc'
       }
     });
+    const processedTransactions = transactions.map((transaction) => {
+     
 
- // Log transactions to verify data
+      if (transaction.sender_acc_no === user.account_no) {
+        transaction.method = 'DEBIT';
+      } else if (transaction.receiver_acc_no === user.account_no) {
+        transaction.method = 'CREDIT';
+      }
 
-    return NextResponse.json(transactions, { status: 200 });
+      return { ...transaction};
+    });
+
+    return NextResponse.json(processedTransactions, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
