@@ -48,7 +48,6 @@ const Register: React.FC = () => {
         body: JSON.stringify(dataWithAccountNumber),
       });
       const result = await res.json();
-      alert(result.error);
       if (res.ok) {
         alert("User registered successfully");
         reset();
