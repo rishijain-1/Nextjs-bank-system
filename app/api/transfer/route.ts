@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
   }
 
-  const { receiver_acc_no, amount, type, method } = await request.json();
+  const { receiver_acc_no, amount, type} = await request.json();
 
   if (!receiver_acc_no || amount == null || !type ) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
