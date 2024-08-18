@@ -88,8 +88,11 @@ const DeleteAccountPage: React.FC = () => {
             <Link href="/profile" className="items-center text-xl px-3 hover:underline">
               Profile
             </Link>
-            <Link href="/settings" className="text-xl px-3 hover:underline">
+            <Link href="/transactionhistory" className="text-xl px-3 hover:underline">
               Transaction
+            </Link>
+            <Link href="/transaction-analysis" className="text-xl px-3 hover:underline">
+              Analysis
             </Link>
             <button
               onClick={() => {

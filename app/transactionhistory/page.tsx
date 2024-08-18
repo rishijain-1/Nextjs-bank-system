@@ -110,6 +110,9 @@ const TransactionHistory = () => {
                 <Link href="/transactionhistory" className="text-xl px-3 hover:underline">
                 Transaction
                 </Link>
+                <Link href="/transaction-analysis" className="text-xl px-3 hover:underline">
+                  Analysis
+                </Link>
                 <button
                 onClick={() => {
                     localStorage.removeItem('token');
