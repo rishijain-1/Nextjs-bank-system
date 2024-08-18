@@ -57,8 +57,8 @@ interface ChartProps {
 
 const TransactionAnalysisChart: React.FC<ChartProps> = ({ type, data, options }) => {
   return (
-    <div>
-      <Line data={data} options={options} />
+    <div className='min-h-80 w-full items-center flex justify-center '>
+      <Line data={data} options={options}   />
     </div>
   );
 };

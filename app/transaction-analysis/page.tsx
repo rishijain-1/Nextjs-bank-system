@@ -140,7 +140,7 @@ const TransactionAnalysisPage: React.FC = () => {
           </div>
         </div>
       </header>
-        <div className='flex justify-center flex-col'>
+        <div className='flex justify-center flex-col min-h-80 items-center '>
             <div className='text-black font-bold text-2xl' > Transaction Analysis</div>
             <TransactionAnalysisChart
                 type="line"
