@@ -92,24 +92,24 @@ const ProfilePage = () => {
   return (
     <div>
       <header className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto flex justify-between">
-          <Link href="/dashboard" className="text-2xl font-bold px-3 hover:underline">
+        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+          <Link href="/dashboard" className="text-2xl font-bold mb-2 sm:mb-0 px-3 hover:underline">
             Dashboard
           </Link>
-          <div className="flex flex-col sm:flex-row overflow-hidden">
-            <Link href="/profile" className="text-xl px-3 hover:underline">
+          <div className="flex flex-col sm:flex-row">
+            <Link href="/profile" className="text-xl mb-2 sm:mb-0 px-3 hover:underline">
               Profile
             </Link>
-            <Link href="/transactionhistory" className="text-xl px-3 hover:underline">
+            <Link href="/transactionhistory" className="text-xl mb-2 sm:mb-0 px-3 hover:underline">
               Transaction
             </Link>
-            <Link href="/transaction-analysis" className="text-xl px-3 hover:underline">
+            <Link href="/transaction-analysis" className="text-xl mb-2 sm:mb-0 px-3 hover:underline">
               Analysis
             </Link>
             <button
               onClick={() => {
-                localStorage.removeItem("token");
-                router.push("/login");
+                localStorage.removeItem('token');
+                router.push('/login');
               }}
               className="text-red-600 px-3 hover:underline"
             >
