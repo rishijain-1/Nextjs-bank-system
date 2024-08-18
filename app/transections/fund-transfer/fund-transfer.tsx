@@ -36,7 +36,7 @@ const FundTransfer = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ receiver_acc_no: receiverAccNo, amount: transferAmount, type, method }),
+        body: JSON.stringify({ receiver_acc_no: receiverAccNo, amount: transferAmount, type}),
       });
   
       const data = await response.json();
@@ -97,18 +97,7 @@ const FundTransfer = () => {
             <option value="RTGS">RTGS</option>
           </select>
         </div>
-        <div className="mb-4">
-          <label htmlFor="method" className="block text-gray-700 font-medium mb-1">Transaction Method</label>
-          <select
-            id="method"
-            value={method}
-            onChange={(e) => setMethod(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          >
-            <option value="CREDIT">Credit</option>
-            <option value="DEBIT">Debit</option>
-          </select>
-        </div>
+        
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
