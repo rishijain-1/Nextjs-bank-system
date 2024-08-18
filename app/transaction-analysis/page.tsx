@@ -4,25 +4,27 @@ import TransactionAnalysisChart from '../../component/TransactionAnalysisChart';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
+import { ChartOptions } from 'chart.js';
 
 // Register components with Chart.js
 ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale);
 
 const TransactionAnalysisPage: React.FC = () => {
-    const router =useRouter()
+  const router = useRouter();
+  
   const [data, setData] = useState({
-    labels: [],
+    labels: [] as string[],
     datasets: [
       {
         label: 'Credits',
-        data: [],
+        data: [] as number[],
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: false,
       },
       {
         label: 'Debits',
-        data: [],
+        data: [] as number[],
         borderColor: 'rgba(255, 99, 132, 1)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         fill: false,
@@ -30,7 +32,7 @@ const TransactionAnalysisPage: React.FC = () => {
     ],
   });
 
-  const [options, setOptions] = useState({
+  const [options, setOptions] = useState<ChartOptions<'line'>>({
     responsive: true,
     plugins: {
       legend: {
@@ -47,7 +49,7 @@ const TransactionAnalysisPage: React.FC = () => {
           display: true,
           text: 'Date',
         },
-        type: 'category' as const,
+        type: 'category',
         ticks: {
           autoSkip: true,
           maxRotation: 45,
@@ -60,9 +62,9 @@ const TransactionAnalysisPage: React.FC = () => {
           text: 'Amount',
         },
         ticks: {
-          beginAtZero: true,
-          callback: (value: number) => `$${value}`,
+          callback: (value: string | number) => `$${value}`,
         },
+        beginAtZero: true,
       },
     },
   });
@@ -74,40 +76,41 @@ const TransactionAnalysisPage: React.FC = () => {
         alert('Authorization token missing');
         return;
       }
-  
-      const response = await fetch('/api/transaction-analysis', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-  
-      const result = await response.json();
-  
-      // Log result for debugging
-      console.log(result);
-  
-      // Ensure result is in the expected format
-      setData({
-        labels: result.map((entry: any) => entry.date),
-        datasets: [
-          {
-            label: 'Credits',
-            data: result.map((entry: any) => entry.credit),
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            fill: false,
+
+      try {
+        const response = await fetch('/api/transaction-analysis', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
           },
-          {
-            label: 'Debits',
-            data: result.map((entry: any) => entry.debit),
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            fill: false,
-          },
-        ],
-      });
+        });
+        const result = await response.json();
+
+        console.log(result);
+
+        setData({
+          labels: result.map((entry: any) => entry.date),
+          datasets: [
+            {
+              label: 'Credits',
+              data: result.map((entry: any) => entry.credit),
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              fill: false,
+            },
+            {
+              label: 'Debits',
+              data: result.map((entry: any) => entry.debit),
+              borderColor: 'rgba(255, 99, 132, 1)',
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              fill: false,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
-  
+
     fetchData();
   }, []);
 
@@ -140,14 +143,14 @@ const TransactionAnalysisPage: React.FC = () => {
           </div>
         </div>
       </header>
-        <div className='flex justify-center flex-col min-h-80 items-center '>
-            <div className='text-black font-bold text-2xl' > Transaction Analysis</div>
-            <TransactionAnalysisChart
-                type="line"
-                data={data}
-                options={options}
-            />
-        </div>
+      <div className='flex justify-center flex-col min-h-80 items-center'>
+        <div className='text-black font-bold text-2xl'>Transaction Analysis</div>
+        <TransactionAnalysisChart
+          type="line"
+          data={data}
+          options={options}
+        />
+      </div>
     </div>
   );
 };

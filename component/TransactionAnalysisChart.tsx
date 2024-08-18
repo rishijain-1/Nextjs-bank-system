@@ -1,6 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale } from 'chart.js';
+import { ChartOptions } from 'chart.js';
 
 // Register Chart.js components
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale);
@@ -17,48 +18,13 @@ interface ChartProps {
       fill: boolean;
     }[];
   };
-  options: {
-    responsive: boolean;
-    plugins: {
-      legend: {
-        display: boolean;
-      };
-      title: {
-        display: boolean;
-        text: string;
-      };
-    };
-    scales: {
-      x: {
-        title: {
-          display: boolean;
-          text: string;
-        };
-        type: 'category';
-        ticks: {
-          autoSkip?: boolean;
-          maxRotation?: number;
-          minRotation?: number;
-        };
-      };
-      y: {
-        title: {
-          display: boolean;
-          text: string;
-        };
-        ticks: {
-          beginAtZero: boolean;
-          callback?: (value: number) => string;
-        };
-      };
-    };
-  };
+  options: ChartOptions<'line'>; // Use ChartOptions for type safety
 }
 
 const TransactionAnalysisChart: React.FC<ChartProps> = ({ type, data, options }) => {
   return (
-    <div className='min-h-80 w-full items-center flex justify-center '>
-      <Line data={data} options={options}   />
+    <div className='min-h-80 w-full items-center flex justify-center'>
+      <Line data={data} options={options} />
     </div>
   );
 };
