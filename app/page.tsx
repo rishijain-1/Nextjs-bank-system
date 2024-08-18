@@ -50,10 +50,10 @@ const Register: React.FC = () => {
       const result = await res.json();
       alert(result.error);
       if (res.ok) {
-        console.log("User registered successfully");
+        alert("User registered successfully");
         reset();
       } else {
-        console.error("Failed to register user:", result.error || "Unknown error");
+        alert(`Failed to register user: ${result.error}`);
       }
     } catch (error) {
       alert(error);
