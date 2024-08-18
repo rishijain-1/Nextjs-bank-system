@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
   const { receiver_acc_no, amount, type, method } = await request.json();
 
-  if (!receiver_acc_no || amount == null || !type || !method) {
+  if (!receiver_acc_no || amount == null || !type ) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
   }
 
@@ -55,12 +55,10 @@ export async function POST(request: NextRequest) {
           sender_acc_no: sender.account_no,
           receiver_acc_no: receiver.account_no,
           amount,
-          type,
-          method,
+          type, 
           transfer_date: new Date(),
         },
       });
-
       // Update sender's balance
       await tx.user.update({
         where: { id: sender.id },
