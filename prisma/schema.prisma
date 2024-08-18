@@ -34,7 +34,7 @@ model Transaction {
   amount          Int
   type            TransactionType @default(IMPS)
   transfer_date   DateTime    @default(now())
-  method          TransactionMethod @default(CREDIT)
+  method          TransactionMethod @default(DEBIT)
   sender          User     @relation("SentTransactions", fields: [sender_acc_no], references: [account_no])
   receiver        User     @relation("ReceivedTransactions", fields: [receiver_acc_no], references: [account_no])
 }
