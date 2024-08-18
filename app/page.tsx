@@ -56,7 +56,7 @@ const Register: React.FC = () => {
         console.error("Failed to register user:", result.error || "Unknown error");
       }
     } catch (error) {
-      console.error("Error:", error);
+      alert("Error:");
     }
   };
 
