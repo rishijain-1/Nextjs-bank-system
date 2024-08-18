@@ -84,9 +84,6 @@ const TransactionAnalysisPage: React.FC = () => {
           },
         });
         const result = await response.json();
-
-        console.log(result);
-
         setData({
           labels: result.map((entry: any) => entry.date),
           datasets: [
@@ -107,7 +104,7 @@ const TransactionAnalysisPage: React.FC = () => {
           ],
         });
       } catch (error) {
-        console.error('Error fetching data:', error);
+        alert(error);
       }
     };
 
