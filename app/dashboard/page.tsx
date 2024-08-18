@@ -84,11 +84,13 @@ const Dashboard = () => {
         </div>
       </header>
       <main className="container mx-auto p-4">
-        <h2 className="text-3xl font-bold uppercase text-black mb-4">Welcome, {user.name}</h2>
-        <div className="bg-white shadow flex justify-around text-black font-bold p-4 rounded-lg">
+        <h2 className="text-2xl sm:text-3xl font-bold uppercase text-black mb-4">
+          Welcome, {user.name}
+        </h2>
+        <div className="bg-white shadow flex flex-col sm:flex-row sm:justify-around text-black font-bold p-4 rounded-lg space-y-2 sm:space-y-0 sm:space-x-4">
           <p>Email: {user.email}</p>
           <p>Account: {user.account_no}</p>
-          <p>Amount:$ {user.closeningBalance}</p>
+          <p>Amount: $ {user.closeningBalance}</p>
           <p>Joined: {new Date(user.created_at).toLocaleDateString()}</p>
         </div>
       </main>
