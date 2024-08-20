@@ -33,8 +33,11 @@ const Dashboard = () => {
           setUser(data);
         } else {
           setError('Failed to fetch user data');
-          console.error('Failed to fetch user data:', response.statusText);
+          setTimeout(() => {
+            router.push('/login')
+          }, 2000);
         }
+        
       } catch (error) {
         setError('An error occurred while fetching user data');
         console.error('An error occurred:', error);

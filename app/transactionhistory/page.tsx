@@ -56,7 +56,10 @@ const TransactionHistory = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        alert('Authorization token missing');
+        alert('Authorization token missing pls login ');
+        setTimeout(() => {
+          router.push('/login')
+        }, 2000);
         return;
       }
 
