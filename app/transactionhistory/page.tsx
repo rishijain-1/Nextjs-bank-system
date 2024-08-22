@@ -17,7 +17,7 @@ interface Transaction {
 const TransactionHistory = () => {
   const router = useRouter();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [deleting, setDeleting] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -45,13 +45,15 @@ const TransactionHistory = () => {
         }
       } catch (error) {
         setError('An error occurred while fetching transactions');
+      }finally{
+        setLoading(false);
       }
     };
 
     fetchTransactions();
   }, []);
 
-  const handleDelete = async (id: string) => {
+  /**const handleDelete = async (id: string) => {
     setDeleting(id);
     try {
       const token = localStorage.getItem('token');
@@ -81,8 +83,10 @@ const TransactionHistory = () => {
     } finally {
       setDeleting(null);
     }
-  };
-
+  };**/
+  if (loading) {
+    return <div className="items-center h-screen flex justify-center">Loading...</div>;
+  }
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -142,14 +146,13 @@ const TransactionHistory = () => {
                     <th className="py-2 px-2 sm:px-4 border-b">Type</th>
                     <th className="py-2 px-2 sm:px-4 border-b">Date</th>
                     <th className="py-2 px-2 sm:px-4 border-b">Method</th>
-                    <th className="py-2 px-2 sm:px-4 border-b">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="items-center" >
                   {transactions.map((transaction) => (
-                    <tr key={transaction.id}>
-                      <td className="py-2 px-2 sm:px-4 border-b">{transaction.id}</td>
-                      <td className="py-2 px-2 sm:px-4 border-b">{transaction.sender_acc_no}</td>
+                    <tr className="" key={transaction.id}>
+                      <td className="py-2 px-2 sm:px-4 flex justify-center border-b">{transaction.id}</td>
+                      <td className="py-2 px-2 sm:px-4  border-b " >{transaction.sender_acc_no}</td>
                       <td className="py-2 px-2 sm:px-4 border-b">{transaction.receiver_acc_no}</td>
                       <td className="py-2 px-2 sm:px-4 border-b">${transaction.amount}</td>
                       <td className="py-2 px-2 sm:px-4 border-b">{transaction.type}</td>
@@ -157,15 +160,7 @@ const TransactionHistory = () => {
                         {new Date(transaction.transfer_date).toLocaleDateString()}
                       </td>
                       <td className="py-2 px-2 sm:px-4 border-b">{transaction.method}</td>
-                      <td className="py-2 px-2 sm:px-4 border-b">
-                        <button
-                          onClick={() => handleDelete(transaction.id)}
-                          disabled={deleting === transaction.id}
-                          className="text-red-500 hover:underline"
-                        >
-                          {deleting === transaction.id ? 'Deleting...' : 'Delete'}
-                        </button>
-                      </td>
+                      
                     </tr>
                   ))}
                 </tbody>

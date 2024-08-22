@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   if (amount <= 0) {
     return NextResponse.json({ error: 'Amount must be greater than zero' }, { status: 400 });
   }
-
+  
   try {
     // Retrieve sender and receiver users
     const sender = await prisma.user.findUnique({ where: { id: userId } });
@@ -45,7 +45,9 @@ export async function POST(request: NextRequest) {
     if (sender.closeningBalance < amount) {
       return NextResponse.json({ error: 'Insufficient funds' }, { status: 400 });
     }
-
+    if(sender.account_no == receiver.account_no) {
+      return NextResponse.json({ error: 'Use Diffrent Account number'},{status: 400})
+    }
     // Start transaction
     
     await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
