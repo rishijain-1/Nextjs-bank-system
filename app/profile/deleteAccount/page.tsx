@@ -11,6 +11,7 @@ interface DeleteAccountFormData {
 
 const DeleteAccountPage: React.FC = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<DeleteAccountFormData>();
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -43,12 +44,15 @@ const DeleteAccountPage: React.FC = () => {
         setError('An error occurred while fetching user data');
         console.error('An error occurred:', error);
       } finally {
-        
+        setLoading(false);
       }
     };
 
     fetchUser();
   }, [router]);
+  if (loading) {
+    return <div className="items-center h-screen flex justify-center">Loading...</div>;
+  }
 
   const onSubmit: SubmitHandler<DeleteAccountFormData> = async (data) => {
     setError(null); 

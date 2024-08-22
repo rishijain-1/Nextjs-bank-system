@@ -13,6 +13,7 @@ interface ProfileFormData {
 
 const ProfilePage = () => {
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ProfileFormData>();
   const [success, setSuccess] = useState<string>("");
@@ -42,11 +43,17 @@ const ProfilePage = () => {
         }
       } catch (error) {
         setError('An error occurred while fetching user data');
+      }finally{
+        setLoading(false);
       }
     };
 
     fetchUser();
   }, [router]);
+
+  if (loading) {
+    return <div className="items-center h-screen flex justify-center">Loading...</div>;
+  }
 
   const onSubmit: SubmitHandler<ProfileFormData> = async (data) => {
     setError('');
